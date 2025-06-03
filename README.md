@@ -1,10 +1,29 @@
 # DITA-OT Dynamic Bash Completion
 
-This directory contains a **smart completion setup script** that automatically discovers DITA-OT installations and sets up intelligent bash completion in a single step.
+This project contains a **smart completion setup script** that automatically discovers DITA-OT installations and sets up intelligent shell command completion in a single step.
+
+##  ✨ What is shell command completion?
+You know how you can press "tab" on the command line and it will try to auto-complete a file name or command option for you? That's shell command completion!
+
+##  ✨ My shell already completes file names. Why should I use this?
+This will also complete options for the `dita` command for you. For example:
+- Type `dita -` and press <tab>, and it will show you the list of command line options available to you:
+```
+$ bin/dita -
+-D            --format      --input       --temp
+--debug       -h            -o            -v
+-f            --help        --output      --verbose
+```
+- Type `dita -f pdf -D` and press <tab>, and it will show you the configured parameters you could use:
+```
+$ bin/dita -f pdf -D 
+args.artlbl  args.output  nav-toc      temp.dir     
+args.input   clean.temp   output.dir
+```
 
 ## 🎯 Quick Start (One Command!)
 
-**Simplest approach** - just run one command and you're done:
+**Simple** - just run one command and you're done:
 
 ```bash
 cd completion-scripts
@@ -32,6 +51,7 @@ The setup script uses similar logic to the actual `dita` command to find your DI
 
 ```bash
 # Auto-discovery with full setup (recommended):
+cd /path/to/dita-ot
 ./setup-dita-completion.sh
 
 # With environment variable:
@@ -41,10 +61,10 @@ export DITA_HOME=/path/to/dita-ot
 # With command line argument:
 ./setup-dita-completion.sh /path/to/dita-ot
 
-# Generate only (no installation):
+# Generate only (generate completion file, don't install it):
 ./setup-dita-completion.sh --generate-only
 
-# Install existing completion:
+# Install existing completion file:
 ./setup-dita-completion.sh --install-only
 
 # System-wide installation (requires sudo):
@@ -100,29 +120,19 @@ dita -D <TAB>          # Shows: args.input= args.output= clean.temp= ...
 
 The setup script performs these steps in one command:
 
-1. **Discovery Phase**: Searches for DITA-OT installation
-2. **Scanning Phase**: Finds all `plugin.xml` files in the plugins directory
-3. **Extraction Phase**: Extracts transformation types using simple grep/sed
-4. **Generation Phase**: Creates optimized bash completion script
-5. **Installation Phase**: Installs to appropriate completion directory
-
-## 🌟 Features
-
-- **One-Command Setup**: Everything happens in a single script execution
-- **Zero Configuration**: Works out of the box in most scenarios
-- **Portable**: Works on Linux, macOS, and Git Bash on Windows
-- **Fast**: Simple grep-based extraction, no XML parsing overhead
-- **Reliable**: Robust error handling and validation
-- **Smart**: Uses the same discovery logic as DITA-OT itself
-- **Flexible**: Options for generate-only or install-only workflows
+1. **Discovery**: Searches for DITA-OT installation
+2. **Scanning**: Finds all `plugin.xml` files in the plugins directory
+3. **Extraction**: Extracts transformation types
+4. **Generation**: Creates customized bash completion script
+5. **Installation**: Installs to appropriate completion directory
 
 ## 🛠️ Troubleshooting
 
 **If auto-discovery fails:**
-1. Make sure you're running from within or below a DITA-OT installation
-2. Check that your DITA-OT has both `bin/dita` and `plugins/` directory
-3. Set `DITA_HOME` manually: `export DITA_HOME=/path/to/dita-ot`
-4. Use explicit path: `./setup-dita-completion.sh /path/to/dita-ot`
+1. Make sure you're running from within or below a DITA-OT installation OR
+2. Set `DITA_HOME` manually: `export DITA_HOME=/path/to/dita-ot` OR
+3. Use explicit path: `./setup-dita-completion.sh /path/to/dita-ot`
+4. Check that your DITA-OT has both `bin/dita` and `plugins/` directory
 
 **If completion doesn't work after installation:**
 ```bash
@@ -145,7 +155,7 @@ source ~/.bashrc
 
 Re-run the setup script when you:
 - Install new DITA-OT plugins
-- Update existing plugins  
+- Update existing plugins (if options have changed) 
 - Change DITA-OT installation
 - Want to refresh completion with latest plugin changes
 
@@ -185,8 +195,6 @@ Test it:
   dita -f <TAB>          # Shows all transtypes
 ```
 
-The setup script makes DITA-OT completion accessible to everyone - just one command and you're ready to go! 🚀 
-
 ## 🔧 Installation Options
 
 ### User-Local Installation (Default)
@@ -218,10 +226,8 @@ The setup script makes DITA-OT completion accessible to everyone - just one comm
 - **Bash** (primary target) - Full completion support
 - **Git Bash** (Windows) - Full completion support
 
-**❌ Not Supported:**
+**❌ Not Yet Supported (Push requests are welcome!):**
+- **PowerShell** - Different completion system
+- **Cmd** - No completion support :-(
 - **Zsh** - Would need different completion syntax
 - **Fish** - Would need complete rewrite
-- **PowerShell** - Different completion system
-- **Cmd** - No completion support
-
-**Note**: This is a bash-specific completion script. For other shells, you would need shell-specific completion scripts with different syntax and approaches. 
