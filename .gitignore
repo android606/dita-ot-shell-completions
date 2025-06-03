@@ -1,0 +1,15 @@
+# Generated completion scripts
+dita-completion.bash
+
+# OS and editor files
+.DS_Store
+Thumbs.db
+*.swp
+*.swo
+*~
+.vscode/
+.idea/
+
+# Temporary files
+*.tmp
+*.log 
