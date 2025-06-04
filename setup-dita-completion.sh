@@ -139,7 +139,7 @@ _dita_completion() {
             return 0
             ;;
         -i|--input)
-            COMPREPLY=( \$(compgen -f -X "!*.dita*" -- \${cur}) )
+            COMPREPLY=( \$(compgen -f -- \${cur} | grep -E '\.(dita|ditamap)$') )
             return 0
             ;;
         -o|--output)
@@ -159,6 +159,19 @@ _dita_completion() {
 
 # Register completion
 complete -F _dita_completion dita
+
+# Register completion for common relative paths
+# Use -o filenames for file completion and -o nospace to prevent auto-completion
+complete -o filenames -o nospace -F _dita_completion ../bin/dita
+complete -o filenames -o nospace -F _dita_completion ./bin/dita
+complete -o filenames -o nospace -F _dita_completion bin/dita
+complete -o filenames -o nospace -F _dita_completion ./dita-wrapper.sh
+
+# Try to register for any command ending in 'dita' (fallback)
+# This uses bash's pattern matching for completion
+for cmd in dita ../bin/dita ./bin/dita bin/dita ./dita-wrapper.sh; do
+    complete -o filenames -o nospace -F _dita_completion "\$cmd" 2>/dev/null
+done
 
 # Info comment for debugging
 echo "# DITA-OT completion loaded: $TRANSTYPE_COUNT transtypes from $PLUGIN_COUNT plugins"
